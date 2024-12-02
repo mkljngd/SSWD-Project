@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <%- include('../partials/header') %>
+    <h1>Meal Plans</h1>
+    <div class="meal-plans-container">
+        <% mealPlans.forEach(plan => { %>
+            <div class="meal-plan-card">
+                <h3>Plan ID: <%= plan.meal_plan_id %></h3>
+                <p>Start Date: <%= plan.start_date %></p>
+                <p>End Date: <%= plan.end_date %></p>
+            </div>
+        <% }) %>
+    </div>
+    <%- include('../partials/footer') %>
+</body>
+</html>
