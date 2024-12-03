@@ -18,13 +18,32 @@ const routes: Routes = [
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password/:token', component: ResetPasswordComponent },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'recipes', component: RecipeListComponent },
-  { path: 'recipes/:id', component: RecipeDetailsComponent },
-  { path: 'profiles', component: ProfileListComponent },
-  { path: 'inventory', component: InventoryComponent },
-  { path: 'inventory/add', component: InventoryFormComponent },
-  { path: 'favorites', component: FavoriteRecipeListComponent }, // Add this route
-
+  { path: 'recipes', component: RecipeListComponent, canActivate: [AuthGuard] },
+  {
+    path: 'recipes/:id',
+    component: RecipeDetailsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'profiles',
+    component: ProfileListComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'inventory',
+    component: InventoryComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'inventory/add',
+    component: InventoryFormComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'favorites',
+    component: FavoriteRecipeListComponent,
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({

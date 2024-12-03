@@ -31,30 +31,53 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     const { email, password } = req.body;
     try {
-        const user = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-        if (!user.rows.length) {
+        // Fetch the user by email
+        const userResult = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+        if (!userResult.rows.length) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        const isMatch = await bcrypt.compare(password, user.rows[0].password_hash);
+        const user = userResult.rows[0];
+
+        // Compare the provided password with the stored hash
+        const isMatch = await bcrypt.compare(password, user.password_hash);
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
+        // Generate a JWT token
         const token = jwt.sign(
-            { user_id: user.rows[0].user_id, role: user.rows[0].role },
+            { user_id: user.user_id, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
-        const user_id = user.rows[0].user_id
 
-        res.status(200).json({ message: 'Login successful', token, user_id });
+        // Fetch profiles associated with the user
+        const profileResult = await pool.query(
+            'SELECT profile_id FROM profiles WHERE user_id = $1',
+            [user.user_id]
+        );
+
+        // Check if profiles exist
+        if (!profileResult.rows.length) {
+            return res.status(400).json({ message: 'No profiles associated with this user' });
+        }
+
+        // Set the first profile_id as the active profile
+        const activeProfileId = profileResult.rows[0].profile_id;
+
+        // Send response with the token, user_id, and active profile_id
+        res.status(200).json({
+            message: 'Login successful',
+            token,
+            user_id: user.user_id,
+            active_profile_id: activeProfileId
+        });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
-
 // Forgot Password
 const forgotPassword = async (req, res) => {
     const { email } = req.body;

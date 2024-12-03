@@ -23,7 +23,8 @@ export class LoginComponent {
         next: (response: any) => {
           localStorage.setItem('token', response.token);
           localStorage.setItem('user_id', response.user_id);
-          this.router.navigate(['/dashboard']);
+          localStorage.setItem('active_profile', "75eebc1d-4a24-4ff6-8f19-47390c80b5d5");
+          this.router.navigate(['/recipes']);
         },
         error: () => {
           this.errorMessage = 'Invalid email or password.';

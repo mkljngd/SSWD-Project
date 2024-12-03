@@ -28,7 +28,10 @@ export class NavbarComponent {
   }
 
   logout() {
+    this.closeMenu()
     localStorage.removeItem('token');
+    localStorage.removeItem('active_profile');
+    localStorage.removeItem('user_id');
     this.isLoggedIn = false;
     this.isAdmin = false;
     this.router.navigate(['/login']);
