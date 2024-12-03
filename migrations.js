@@ -109,31 +109,6 @@ const createTables = async () => {
             PRIMARY KEY (profile_id, recipe_id)
         )`,
 
-        // Blacklisted Ingredients Table
-        `CREATE TABLE IF NOT EXISTS blacklisted_ingredients (
-            profile_id UUID REFERENCES profiles(profile_id) ON DELETE CASCADE,
-            ingredient_id UUID REFERENCES ingredients(ingredient_id),
-            reason TEXT,
-            blacklisted_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY (profile_id, ingredient_id)
-        )`,
-
-        // Blacklisted Cuisines Table
-        `CREATE TABLE IF NOT EXISTS blacklisted_cuisines (
-            profile_id UUID REFERENCES profiles(profile_id) ON DELETE CASCADE,
-            cuisine_id UUID REFERENCES cuisines(cuisine_id),
-            reason TEXT,
-            blacklisted_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY (profile_id, cuisine_id)
-        )`,
-
-        // Favorite Cuisines Table
-        `CREATE TABLE IF NOT EXISTS favorite_cuisines (
-            profile_id UUID REFERENCES profiles(profile_id) ON DELETE CASCADE,
-            cuisine_id UUID REFERENCES cuisines(cuisine_id),
-            favorited_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY (profile_id, cuisine_id)
-        )`,
 
         // Shopping Lists Table
         `CREATE TABLE IF NOT EXISTS shopping_lists (
@@ -155,31 +130,6 @@ const createTables = async () => {
             purchased BOOLEAN DEFAULT FALSE,
             UNIQUE (shopping_list_id, ingredient_id)
         )`,
-
-        // Expenses Table
-        `CREATE TABLE IF NOT EXISTS expenses (
-            expense_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-            user_id UUID REFERENCES users(user_id) ON DELETE CASCADE,
-            budget_id UUID REFERENCES budget(budget_id),
-            amount NUMERIC(10,2) NOT NULL,
-            category VARCHAR(50),
-            description TEXT,
-            date DATE NOT NULL,
-            created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-        )`,
-
-        // Budget Table
-        `CREATE TABLE IF NOT EXISTS budget (
-            budget_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-            user_id UUID REFERENCES users(user_id) ON DELETE CASCADE,
-            category VARCHAR(50),
-            amount NUMERIC(10,2) NOT NULL,
-            start_date DATE NOT NULL,
-            end_date DATE NOT NULL,
-            created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-        )`
     ];
 
     for (const query of queries) {

@@ -19,7 +19,6 @@ const recipeRoutes = require('./routes/recipes');
 const ingredientRoutes = require('./routes/ingredients');
 const mealPlanRoutes = require('./routes/mealPlans');
 const inventoryRoutes = require('./routes/inventory');
-const expenseRoutes = require('./routes/expenses');
 const notificationRoutes = require('./routes/notifications');
 
 // Route handlers for APIs
@@ -28,7 +27,6 @@ app.use('/api/recipes', recipeRoutes);
 app.use('/api/ingredients', ingredientRoutes);
 app.use('/api/mealPlans', mealPlanRoutes);
 app.use('/api/inventory', inventoryRoutes);
-app.use('/api/expenses', expenseRoutes);
 app.use('/api/notifications', notificationRoutes);
 
 // Set EJS as the view engine
@@ -84,16 +82,6 @@ app.get('/ingredients', async (req, res) => {
     } catch (error) {
         console.error('Error fetching ingredients:', error);
         res.status(500).send('Error fetching ingredients');
-    }
-});
-// Expenses Page
-app.get('/expenses', async (req, res) => {
-    try {
-        const { rows: expenses } = await pool.query('SELECT * FROM expenses');
-        res.render('pages/expenses', { title: 'Expenses', expenses });
-    } catch (error) {
-        console.error('Error fetching expenses:', error);
-        res.status(500).send('Error fetching expenses');
     }
 });
 

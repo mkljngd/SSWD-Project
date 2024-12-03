@@ -1,5 +1,5 @@
 # Smart Meal Planner
-A Node.js-based meal planner, expense tracker, and inventory manager.
+A Node.js-based meal planner and inventory manager.
 
 ## Features
 - Hosted on Heroku.
