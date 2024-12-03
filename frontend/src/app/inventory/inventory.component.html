@@ -1,0 +1,21 @@
+<div class="container">
+  <h1 class="page-title">Inventory Management</h1>
+  <div class="inventory-list">
+    <div
+      *ngFor="let item of inventory"
+      class="inventory-card"
+      [class.low-stock]="item.quantity < 5"
+      [class.expiring]="item.isExpiring"
+    >
+      <div class="inventory-details">
+        <h3>{{ item.name }}</h3>
+        <p>Quantity: {{ item.quantity }} {{ item.unit }}</p>
+        <p *ngIf="item.expiry_date">Expiry Date: {{ item.expiry_date | date }}</p>
+      </div>
+      <div class="inventory-actions">
+        <button class="btn btn-danger" (click)="deleteInventoryItem(item.id)">Delete</button>
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-primary" (click)="addInventory()">Add Inventory</button>
+</div>

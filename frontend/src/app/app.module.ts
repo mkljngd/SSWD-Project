@@ -18,6 +18,8 @@ import { RecipeListComponent } from './recipe-list/recipe-list.component';
 import { RecipeDetailsComponent } from './recipe-details/recipe-details.component';
 import { ProfileListComponent } from './profile-list/profile-list.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { InventoryComponent } from './inventory/inventory.component';
+import { InventoryFormComponent } from './inventory-form/inventory-form.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     RecipeListComponent,
     RecipeDetailsComponent,
     ProfileListComponent,
+    InventoryComponent,
+    InventoryFormComponent,
   ],
   imports: [
     BrowserModule,

@@ -8,6 +8,8 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { RecipeListComponent } from './recipe-list/recipe-list.component';
 import { RecipeDetailsComponent } from './recipe-details/recipe-details.component';
 import { ProfileListComponent } from './profile-list/profile-list.component';
+import { InventoryComponent } from './inventory/inventory.component';
+import { InventoryFormComponent } from './inventory-form/inventory-form.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -18,7 +20,8 @@ const routes: Routes = [
   { path: 'recipes', component: RecipeListComponent },
   { path: 'recipes/:id', component: RecipeDetailsComponent },
   { path: 'profiles', component: ProfileListComponent },
-
+  { path: 'inventory', component: InventoryComponent },
+  { path: 'inventory/add', component: InventoryFormComponent },
 ];
 
 @NgModule({
