@@ -6,6 +6,7 @@ import { AuthGuard } from './auth.guard';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { RecipeListComponent } from './recipe-list/recipe-list.component';
+import { RecipeDetailsComponent } from './recipe-details/recipe-details.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'reset-password/:token', component: ResetPasswordComponent },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'recipes', component: RecipeListComponent },
+  { path: 'recipes/:id', component: RecipeDetailsComponent }
 ];
 
 @NgModule({

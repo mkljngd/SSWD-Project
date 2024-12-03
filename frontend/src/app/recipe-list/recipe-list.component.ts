@@ -51,7 +51,7 @@ export class RecipeListComponent implements OnInit {
     );
   }
 
-  viewRecipe(recipeId: number) {
-    this.router.navigate(['/recipes', recipeId]);
+  viewRecipe(recipeId: string) {
+    this.router.navigate([`/recipes/${recipeId}`]);
   }
 }
