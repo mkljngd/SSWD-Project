@@ -22,6 +22,7 @@ const ingredientRoutes = require('./routes/ingredients');
 const mealPlanRoutes = require('./routes/mealPlans');
 const inventoryRoutes = require('./routes/inventory');
 const notificationRoutes = require('./routes/notifications');
+const profileRoutes = require('./routes/profiles');
 
 // Public Routes
 app.use('/api/auth', authRoutes);
@@ -34,6 +35,7 @@ app.use('/api/mealPlans', authMiddleware, mealPlanRoutes);
 app.use('/api/inventory', authMiddleware, inventoryRoutes);
 app.use('/api/notifications', authMiddleware, notificationRoutes);
 
+app.use('/api/profiles', authMiddleware, profileRoutes);
 // Set EJS as the view engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
