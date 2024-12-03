@@ -16,6 +16,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { RecipeListComponent } from './recipe-list/recipe-list.component';
 import { RecipeDetailsComponent } from './recipe-details/recipe-details.component';
+import { ProfileListComponent } from './profile-list/profile-list.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -28,8 +30,15 @@ import { RecipeDetailsComponent } from './recipe-details/recipe-details.componen
     FooterComponent,
     RecipeListComponent,
     RecipeDetailsComponent,
+    ProfileListComponent,
   ],
-  imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpClientModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+  ],
   providers: [
     AuthGuard,
     {

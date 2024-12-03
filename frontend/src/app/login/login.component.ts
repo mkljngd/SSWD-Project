@@ -22,6 +22,7 @@ export class LoginComponent {
       .subscribe({
         next: (response: any) => {
           localStorage.setItem('token', response.token);
+          localStorage.setItem('user_id', response.user_id);
           this.router.navigate(['/dashboard']);
         },
         error: () => {

@@ -1,0 +1,73 @@
+<div class="container">
+  <h1 class="page-title">Manage Profiles</h1>
+  <div class="profiles-list">
+    <div
+      *ngFor="let profile of profiles"
+      class="profile-card"
+      [class.active]="profile.is_active"
+      (click)="toggleActiveProfile(profile.profile_id)"
+    >
+      <div class="profile-details">
+        <h3>{{ profile.profile_name }}</h3>
+      </div>
+      <div class="profile-actions">
+        <button class="btn" (click)="editProfile(profile)">Edit</button>
+      </div>
+    </div>
+  </div>
+  <div class="add-profile">
+    <button class="btn btn-primary" (click)="openAddProfileDialog()">Add Profile</button>
+  </div>
+
+  <!-- Dialog for Add/Edit Profile -->
+  <div *ngIf="showDialog" class="dialog-backdrop">
+    <div class="dialog">
+      <h2>{{ isEditMode ? 'Edit Profile' : 'Add Profile' }}</h2>
+      <form (ngSubmit)="saveProfile()">
+        <div class="form-group">
+          <label for="profileName">Profile Name</label>
+          <input
+            type="text"
+            id="profileName"
+            [(ngModel)]="currentProfile.profile_name"
+            name="profileName"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label>Dietary Preferences</label>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                [(ngModel)]="currentProfile.dietary_preferences.vegetarian"
+                name="vegetarian"
+              />
+              Vegetarian
+            </label>
+          </div>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                [(ngModel)]="currentProfile.dietary_preferences.vegan"
+                name="vegan"
+              />
+              Vegan
+            </label>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button
+          *ngIf="isEditMode"
+          type="button"
+          class="btn btn-danger"
+          (click)="deleteProfile(currentProfile.profile_id)"
+        >
+          Delete
+        </button>
+        <button type="button" class="btn" (click)="closeDialog()">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>
