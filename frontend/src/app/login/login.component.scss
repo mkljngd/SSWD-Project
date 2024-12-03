@@ -52,3 +52,40 @@ input {
   margin-top: 1rem;
   text-align: center;
 }
+.links {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+
+  a {
+    text-decoration: none;
+    color: #bb86fc;
+    font-size: 0.9rem;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+}
+@media (max-width: 480px) {
+  .form {
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: 1.2rem;
+  }
+
+  input {
+    padding: 0.6rem;
+  }
+
+  .btn {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  .link {
+    font-size: 0.8rem;
+  }
+}
