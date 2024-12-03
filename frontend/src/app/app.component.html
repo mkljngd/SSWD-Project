@@ -1,18 +1,4 @@
 <div class="app-container">
-  <!-- <header class="app-header">
-    <nav class="navbar">
-      <span class="app-name">Smart Meal Planner</span>
-      <div class="navbar-links">
-        <ng-container *ngIf="isLoggedIn(); else guestLinks">
-          <button class="btn-link" (click)="logout()">Logout</button>
-        </ng-container>
-        <ng-template #guestLinks>
-          <a class="navbar-link" routerLink="/login">Login</a>
-          <a class="navbar-link" routerLink="/register">Register</a>
-        </ng-template>
-      </div>
-    </nav>
-  </header> -->
   <app-navbar></app-navbar>
   <main class="app-main">
     <router-outlet></router-outlet>
