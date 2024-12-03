@@ -28,15 +28,74 @@ const getAllRecipes = async (req, res) => {
     }
 };
 
+// Get recipes filtered by cuisine
+const getRecipesByCuisine = async (req, res) => {
+    const { cuisine_id } = req.params;
+    try {
+        const result = await pool.query(
+            `SELECT * FROM recipes WHERE cuisine_id = $1`,
+            [cuisine_id]
+        );
+        res.status(200).json(result.rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+const suggestRecipes = async (req, res) => {
+    const { user_id } = req.query;
+    try {
+        // Fetch user's dietary preferences
+        const { rows: profiles } = await pool.query(
+            `SELECT dietary_preferences FROM profiles WHERE user_id = $1 AND is_active = true`,
+            [user_id]
+        );
+        if (profiles.length === 0) {
+            return res.status(400).json({ message: 'No active profile found for user' });
+        }
+
+        const { vegetarian, vegan, allergies } = profiles[0].dietary_preferences || {};
+
+        // Build query filters based on dietary preferences
+        const filters = [];
+        if (vegetarian) filters.push(`recipes.is_vegetarian = true`);
+        if (vegan) filters.push(`recipes.is_vegan = true`);
+        if (allergies && allergies.length > 0) {
+            filters.push(
+                `NOT EXISTS (
+                    SELECT 1 FROM recipe_ingredients ri
+                    JOIN ingredients i ON ri.ingredient_id = i.ingredient_id
+                    WHERE ri.recipe_id = recipes.recipe_id AND i.name = ANY($1)
+                )`
+            );
+        }
+
+        const query = `
+            SELECT DISTINCT recipes.*
+            FROM recipes
+            LEFT JOIN recipe_ingredients ri ON recipes.recipe_id = ri.recipe_id
+            LEFT JOIN ingredients i ON ri.ingredient_id = i.ingredient_id
+            WHERE ${filters.length > 0 ? filters.join(' AND ') : '1=1'}
+            LIMIT 10
+        `;
+
+        const result = await pool.query(query, allergies ? [allergies] : []);
+        res.status(200).json(result.rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
 // Update a recipe
 const updateRecipe = async (req, res) => {
     const { id } = req.params;
-    const { title, description, instructions, image_url } = req.body;
+    const { title, description, instructions, image_url, cuisine_id } = req.body;
     try {
         const result = await pool.query(
-            `UPDATE recipes SET title = $1, description = $2, instructions = $3, image_url = $4, updated_at = NOW()
-            WHERE recipe_id = $5 RETURNING *`,
-            [title, description, instructions, image_url, id]
+            `UPDATE recipes 
+             SET title = $1, description = $2, instructions = $3, image_url = $4, cuisine_id = $5, updated_at = NOW()
+             WHERE recipe_id = $6 RETURNING *`,
+            [title, description, instructions, image_url, cuisine_id, id]
         );
         res.status(200).json(result.rows[0]);
     } catch (err) {
@@ -55,31 +114,11 @@ const deleteRecipe = async (req, res) => {
     }
 };
 
-// Suggest recipes
-const suggestRecipes = async (req, res) => {
-    const { ingredients, preferences } = req.query;
-    try {
-        const result = await pool.query(
-            `SELECT recipe_id, title, description, image_url 
-            FROM recipes 
-            WHERE EXISTS (
-                SELECT 1 FROM recipe_ingredients 
-                WHERE recipe_ingredients.recipe_id = recipes.recipe_id
-                AND recipe_ingredients.ingredient_id = ANY($1::uuid[])
-            ) AND ($2 IS NULL OR preferences @> $2::jsonb)
-            LIMIT 10`,
-            [ingredients ? ingredients.split(',') : [], preferences ? JSON.stringify(preferences.split(',')) : null]
-        );
-        res.status(200).json(result.rows);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
-
 module.exports = {
     createRecipe,
     getAllRecipes,
+    getRecipesByCuisine, // New
+    suggestRecipes, // Enhanced
     updateRecipe,
     deleteRecipe,
-    suggestRecipes
 };

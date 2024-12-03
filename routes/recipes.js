@@ -1,9 +1,11 @@
 const express = require("express");
 const {
-  createRecipe,
-  getAllRecipes,
-  updateRecipe,
-  deleteRecipe,
+    createRecipe,
+    getAllRecipes,
+    getRecipesByCuisine, 
+    suggestRecipes, 
+    updateRecipe,
+    deleteRecipe,
 } = require("../controllers/recipesController");
 const authMiddleware = require("../middlewares/authMiddleware");
 const roleMiddleware = require("../middlewares/roleMiddleware");
@@ -15,6 +17,12 @@ router.post("/", authMiddleware, createRecipe);
 
 // Get all recipes (Public)
 router.get("/", getAllRecipes);
+
+// Get recipes filtered by cuisine (Public)
+router.get("/cuisine/:cuisine_id", getRecipesByCuisine);
+
+// Get enhanced recipe suggestions (Authenticated users only)
+router.get("/suggestions", authMiddleware, suggestRecipes);
 
 // Update a recipe (Admin role only)
 router.put("/:id", authMiddleware, roleMiddleware(["admin"]), updateRecipe);
