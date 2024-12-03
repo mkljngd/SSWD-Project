@@ -15,7 +15,6 @@ import { AuthGuard } from './auth.guard';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { RecipeListComponent } from './recipe-list/recipe-list.component';
-import { RecipeFormComponent } from './recipe-form/recipe-form.component';
 
 @NgModule({
   declarations: [
