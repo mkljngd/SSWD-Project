@@ -181,7 +181,6 @@ const deleteRecipe = async (req, res) => {
 
 const addFavoriteRecipe = async (req, res) => {
   const { profile_id, recipe_id } = req.body;
-
   try {
     await pool.query(
       `INSERT INTO favorite_recipes (profile_id, recipe_id) VALUES ($1, $2)`,
@@ -193,14 +192,58 @@ const addFavoriteRecipe = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+// Get favorite recipes of a profile
+const getFavoriteRecipes = async (req, res) => {
+  const { profile_id, page = 1, limit = 10 } = req.query; // Pass profile_id as query parameter
+  const offset = (page - 1) * limit;
+
+  try {
+    const result = await pool.query(
+      `SELECT 
+                recipes.recipe_id, 
+                recipes.user_id, 
+                cuisines.name AS cuisine, 
+                recipes.title, 
+                recipes.description, 
+                recipes.instructions, 
+                recipes.image_url, 
+                recipes.source_url, 
+                recipes.preparation_time, 
+                recipes.rating, 
+                recipes.created_at, 
+                recipes.updated_at
+            FROM favorite_recipes
+            JOIN recipes ON favorite_recipes.recipe_id = recipes.recipe_id
+            JOIN cuisines ON recipes.cuisine_id = cuisines.cuisine_id
+            WHERE favorite_recipes.profile_id = $1
+            LIMIT $2 OFFSET $3`,
+      [profile_id, parseInt(limit), parseInt(offset)]
+    );
+
+    const totalFavorites = await pool.query(
+      `SELECT COUNT(*) FROM favorite_recipes WHERE profile_id = $1`,
+      [profile_id]
+    );
+    const totalPages = Math.ceil(totalFavorites.rows[0].count / limit);
+
+    res.status(200).json({
+      recipes: result.rows,
+      currentPage: parseInt(page),
+      totalPages,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
 module.exports = {
   createRecipe,
   getAllRecipes,
-  getRecipesByCuisine, 
-  suggestRecipes, 
+  getRecipesByCuisine,
+  suggestRecipes,
   updateRecipe,
   deleteRecipe,
   getRecipeById,
-  addFavoriteRecipe
+  addFavoriteRecipe,
+  getFavoriteRecipes
 };
