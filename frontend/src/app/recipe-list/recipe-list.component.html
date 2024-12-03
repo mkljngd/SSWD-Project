@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="filters">
+    <input
+      type="text"
+      placeholder="Search recipes..."
+      [(ngModel)]="searchQuery"
+      class="search-input"
+    />
+    <select [(ngModel)]="cuisineFilter" class="filter-dropdown">
+      <option value="">All Cuisines</option>
+      <option *ngFor="let cuisine of ['Italian', 'Chinese', 'Indian']" [value]="cuisine">
+        {{ cuisine }}
+      </option>
+    </select>
+  </div>
+  <div class="recipe-list">
+    <h1 class="page-title">Recipes</h1>
+    <ul>
+      <li *ngFor="let recipe of filterRecipes()" class="recipe-card">
+        <span class="recipe-title">{{ recipe.title }}</span>
+        <a class="view-details-link" (click)="viewRecipe(recipe.id)">View Details</a>
+      </li>
+    </ul>
+  </div>
+  <div class="pagination">
+    <a
+      class="pagination-link"
+      (click)="previousPage()"
+      [class.disabled]="currentPage === 1"
+    >
+      Previous
+    </a>
+    <span class="pagination-info">Page {{ currentPage }} of {{ totalPages }}</span>
+    <a
+      class="pagination-link"
+      (click)="nextPage()"
+      [class.disabled]="currentPage === totalPages"
+    >
+      Next
+    </a>
+  </div>
+</div>
