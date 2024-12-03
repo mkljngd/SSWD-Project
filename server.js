@@ -4,6 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 const path = require('path');
 const { Pool } = require('pg');
+const authMiddleware = require('./middlewares/authMiddleware');
 
 const app = express();
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
@@ -14,6 +15,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
+const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const recipeRoutes = require('./routes/recipes');
 const ingredientRoutes = require('./routes/ingredients');
@@ -21,13 +23,16 @@ const mealPlanRoutes = require('./routes/mealPlans');
 const inventoryRoutes = require('./routes/inventory');
 const notificationRoutes = require('./routes/notifications');
 
-// Route handlers for APIs
-app.use('/api/users', userRoutes);
-app.use('/api/recipes', recipeRoutes);
-app.use('/api/ingredients', ingredientRoutes);
-app.use('/api/mealPlans', mealPlanRoutes);
-app.use('/api/inventory', inventoryRoutes);
-app.use('/api/notifications', notificationRoutes);
+// Public Routes
+app.use('/api/auth', authRoutes);
+
+// Protected Routes
+app.use('/api/users', authMiddleware, userRoutes);
+app.use('/api/recipes', authMiddleware, recipeRoutes);
+app.use('/api/ingredients', authMiddleware, ingredientRoutes);
+app.use('/api/mealPlans', authMiddleware, mealPlanRoutes);
+app.use('/api/inventory', authMiddleware, inventoryRoutes);
+app.use('/api/notifications', authMiddleware, notificationRoutes);
 
 // Set EJS as the view engine
 app.set('view engine', 'ejs');
@@ -101,3 +106,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
+
+module.exports = app;
