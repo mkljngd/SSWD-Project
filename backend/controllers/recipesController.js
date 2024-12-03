@@ -60,32 +60,53 @@ const getAllRecipes = async (req, res) => {
 // Get a recipe by ID
 const getRecipeById = async (req, res) => {
   const { id } = req.params; // Extract recipe_id from URL parameters
-  try {
-    const result = await pool.query(
-      `SELECT 
-                recipes.recipe_id, 
-                recipes.user_id, 
-                cuisines.name AS cuisine, 
-                recipes.title, 
-                recipes.description, 
-                recipes.instructions, 
-                recipes.image_url, 
-                recipes.source_url, 
-                recipes.preparation_time, 
-                recipes.rating, 
-                recipes.created_at, 
-                recipes.updated_at
-            FROM recipes
-            JOIN cuisines ON recipes.cuisine_id = cuisines.cuisine_id
-            WHERE recipes.recipe_id = $1`,
-      [id]
-    );
+  const { profile_id } = req.query; // Extract profile_id from query parameters
 
-    if (result.rows.length === 0) {
+  try {
+    // Query to fetch recipe details
+    const recipeQuery = `
+      SELECT 
+        recipes.recipe_id, 
+        recipes.user_id, 
+        cuisines.name AS cuisine, 
+        recipes.title, 
+        recipes.description, 
+        recipes.instructions, 
+        recipes.image_url, 
+        recipes.source_url, 
+        recipes.preparation_time, 
+        recipes.rating, 
+        recipes.created_at, 
+        recipes.updated_at
+      FROM recipes
+      JOIN cuisines ON recipes.cuisine_id = cuisines.cuisine_id
+      WHERE recipes.recipe_id = $1
+    `;
+
+    const recipeResult = await pool.query(recipeQuery, [id]);
+
+    if (recipeResult.rows.length === 0) {
       return res.status(404).json({ error: "Recipe not found" });
     }
 
-    res.status(200).json(result.rows[0]);
+    // Check if the recipe is a favorite of the user
+    const favoriteQuery = `
+      SELECT 1 
+      FROM favorite_recipes 
+      WHERE profile_id = $1 AND recipe_id = $2
+    `;
+
+    const favoriteResult = await pool.query(favoriteQuery, [profile_id, id]);
+    const isFavorite = favoriteResult.rows.length > 0;
+
+    // Include the `is_favorite` field in the response
+    const recipe = {
+      ...recipeResult.rows[0],
+      is_favorite: isFavorite,
+    };
+    console.log("SENDING", recipe)
+
+    res.status(200).json(recipe);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -235,7 +256,23 @@ const getFavoriteRecipes = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+const removeFavoriteRecipe = async (req, res) => {
+  const { profile_id, recipe_id } = req.body;
+  try {
+    const result = await pool.query(
+      `DELETE FROM favorite_recipes WHERE profile_id = $1 AND recipe_id = $2`,
+      [profile_id, recipe_id]
+    );
 
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Favorite recipe not found" });
+    }
+
+    res.status(200).json({ message: "Recipe removed from favorites successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 module.exports = {
   createRecipe,
   getAllRecipes,
@@ -245,5 +282,6 @@ module.exports = {
   deleteRecipe,
   getRecipeById,
   addFavoriteRecipe,
-  getFavoriteRecipes
+  getFavoriteRecipes,
+  removeFavoriteRecipe,
 };

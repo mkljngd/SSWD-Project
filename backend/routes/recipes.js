@@ -8,7 +8,8 @@ const {
   deleteRecipe,
   getRecipeById,
   addFavoriteRecipe,
-  getFavoriteRecipes
+  getFavoriteRecipes,
+  removeFavoriteRecipe
 } = require("../controllers/recipesController");
 const authMiddleware = require("../middlewares/authMiddleware");
 const roleMiddleware = require("../middlewares/roleMiddleware");
@@ -22,6 +23,8 @@ router.post("/", authMiddleware, createRecipe);
 router.get("/", authMiddleware, getAllRecipes);
 
 router.get("/favorites", authMiddleware, getFavoriteRecipes);
+
+router.delete("/favorites", authMiddleware, removeFavoriteRecipe);
 router.get("/:id", getRecipeById); // New route
 
 // Get recipes filtered by cuisine (Public)

@@ -11,21 +11,6 @@
   align-items: center;
   margin-bottom: 1rem;
 
-  .favorite-button {
-    padding: 0.5rem 1rem;
-    background: #6200ea;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-      background: #3700b3;
-    }
-  }
 }
 
 .recipe-details {
@@ -92,4 +77,33 @@
   &:hover {
     color: #7c4dff;
   }
+}
+.favorite {
+  background-color: #ff5252; /* Subtle red */
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.not-favorite {
+  background-color: #4caf50; /* Subtle green */
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.favorite:hover {
+  background-color: #e53935;
+}
+
+.not-favorite:hover {
+  background-color: #388e3c;
 }

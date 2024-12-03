@@ -28,7 +28,8 @@ export class RecipeDetailsComponent implements OnInit {
   }
 
   fetchRecipeDetails(recipeId: string) {
-    const apiUrl = `${environment.apiUrl}/recipes/${recipeId}`;
+    const profileId = localStorage.getItem('active_profile');
+    const apiUrl = `${environment.apiUrl}/recipes/${recipeId}?profile_id=${profileId}`;
     this.http.get(apiUrl).subscribe({
       next: (response: any) => {
         this.recipe = response;
@@ -58,4 +59,38 @@ export class RecipeDetailsComponent implements OnInit {
       },
     });
   }
+
+toggleFavorite() {
+  const profileId = localStorage.getItem('active_profile');
+  const apiUrl = `${environment.apiUrl}/recipes/favorites`;
+
+  if (this.recipe.is_favorite) {
+    // Remove from favorites
+    this.http.delete(apiUrl, {
+      body: { profile_id: profileId, recipe_id: this.recipe.recipe_id },
+    }).subscribe({
+      next: () => {
+        this.recipe.is_favorite = false;
+        alert('Recipe removed from favorites!');
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Failed to remove recipe from favorites.');
+      },
+    });
+  } else {
+    // Add to favorites
+    this.http.post(apiUrl, { profile_id: profileId, recipe_id: this.recipe.recipe_id }).subscribe({
+      next: () => {
+        this.recipe.is_favorite = true;
+        alert('Recipe added to favorites!');
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Failed to add recipe to favorites.');
+      },
+    });
+  }
+}
+
 }

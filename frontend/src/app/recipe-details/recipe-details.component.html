@@ -1,20 +1,25 @@
 <div class="container">
   <div class="header-row">
     <div class="recipe-title-row">
-      <button class="favorite-button" (click)="addToFavorites()">Favorite</button>
-    </div>
+      <button
+      [class.favorite]="recipe?.is_favorite"
+      [class.not-favorite]="!recipe?.is_favorite"
+      (click)="toggleFavorite()"
+    >
+      {{ recipe?.is_favorite ? 'Remove as Favorite' : 'Add as Favorite' }}
+    </button>    </div>
   </div>
   <div class="recipe-details">
-    <h1 class="recipe-title">{{ recipe.title }}</h1>
-    <img [src]="recipe.image_url" alt="{{ recipe.title }}" class="recipe-image" />
-    <p class="recipe-description">{{ recipe.description }}</p>
+    <h1 class="recipe-title">{{ recipe?.title }}</h1>
+    <img [src]="recipe?.image_url" alt="{{ recipe?.title }}" class="recipe-image" />
+    <p class="recipe-description">{{ recipe?.description }}</p>
     <div class="recipe-info">
-      <p><strong>Cuisine:</strong> {{ recipe.cuisine }}</p>
-      <p><strong>Preparation Time:</strong> {{ recipe.preparation_time }} minutes</p>
-      <p><strong>Rating:</strong> {{ recipe.rating }}</p>
+      <p><strong>Cuisine:</strong> {{ recipe?.cuisine }}</p>
+      <p><strong>Preparation Time:</strong> {{ recipe?.preparation_time }} minutes</p>
+      <p><strong>Rating:</strong> {{ recipe?.rating }}</p>
     </div>
     <h2>Instructions</h2>
-    <p>{{ recipe.instructions }}</p>
+    <p>{{ recipe?.instructions }}</p>
     <a (click)="goBack()" class="link-back">Back to Recipes</a>
 
   </div>
