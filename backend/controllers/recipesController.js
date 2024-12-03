@@ -20,9 +20,38 @@ const createRecipe = async (req, res) => {
 
 // Get all recipes
 const getAllRecipes = async (req, res) => {
+    const { page = 1, limit = 10 } = req.query; // Default to page 1, 10 items per page
+    const offset = (page - 1) * limit;
+
     try {
-        const result = await pool.query('SELECT * FROM recipes');
-        res.status(200).json(result.rows);
+        const result = await pool.query(
+            `SELECT 
+                recipes.recipe_id, 
+                recipes.user_id, 
+                cuisines.name AS cuisine, 
+                recipes.title, 
+                recipes.description, 
+                recipes.instructions, 
+                recipes.image_url, 
+                recipes.source_url, 
+                recipes.preparation_time, 
+                recipes.rating, 
+                recipes.created_at, 
+                recipes.updated_at
+            FROM recipes
+            JOIN cuisines ON recipes.cuisine_id = cuisines.cuisine_id
+            LIMIT $1 OFFSET $2`,
+            [parseInt(limit), parseInt(offset)]
+        );
+
+        const totalRecipes = await pool.query(`SELECT COUNT(*) FROM recipes`);
+        const totalPages = Math.ceil(totalRecipes.rows[0].count / limit);
+
+        res.status(200).json({
+            recipes: result.rows,
+            currentPage: parseInt(page),
+            totalPages,
+        });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
