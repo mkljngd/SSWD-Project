@@ -7,6 +7,7 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 // Validation schema for profile creation and updates
 const profileSchema = Joi.object({
     profile_name: Joi.string().max(100).required(),
+    user_id: Joi.string().guid().required(),
     dietary_preferences: Joi.object({
         vegetarian: Joi.boolean(),
         vegan: Joi.boolean(),

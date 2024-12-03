@@ -46,8 +46,9 @@ const login = async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
+        const user_id = user.rows[0].user_id
 
-        res.status(200).json({ message: 'Login successful', token });
+        res.status(200).json({ message: 'Login successful', token, user_id });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Internal Server Error' });
