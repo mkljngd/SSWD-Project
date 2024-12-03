@@ -5,14 +5,29 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 // Add an inventory item
 const addInventoryItem = async (req, res) => {
-    const { profile_id, ingredient_id, quantity, unit, expiry_date } = req.body;
+    const { profile_id, ingredient_id, quantity, unit, expiry_date, low_stock_threshold } = req.body;
     try {
         const result = await pool.query(
-            `INSERT INTO inventory_items (profile_id, ingredient_id, quantity, unit, expiry_date)
-             VALUES ($1, $2, $3, $4, $5) RETURNING *`,
-            [profile_id, ingredient_id, quantity, unit, expiry_date]
+            `INSERT INTO inventory_items (profile_id, ingredient_id, quantity, unit, expiry_date, low_stock_threshold)
+             VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+            [profile_id, ingredient_id, quantity, unit, expiry_date, low_stock_threshold || 5]
         );
         res.status(201).json(result.rows[0]);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+// Fetch low-stock items
+const getLowStockItems = async (req, res) => {
+    try {
+        const result = await pool.query(
+            `SELECT ii.inventory_item_id, i.name, ii.quantity, ii.unit, ii.low_stock_threshold
+             FROM inventory_items ii
+             JOIN ingredients i ON ii.ingredient_id = i.ingredient_id
+             WHERE ii.quantity <= ii.low_stock_threshold`
+        );
+        res.status(200).json(result.rows);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -83,5 +98,6 @@ module.exports = {
     getAllInventoryItems,
     updateInventoryItem,
     deleteInventoryItem,
-    getExpiringItems
+    getExpiringItems,
+    getLowStockItems // New method
 };

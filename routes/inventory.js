@@ -4,7 +4,8 @@ const {
     getAllInventoryItems,
     updateInventoryItem,
     deleteInventoryItem,
-    getExpiringItems
+    getExpiringItems,
+    getLowStockItems // New import
 } = require('../controllers/inventoryController');
 const authMiddleware = require('../middlewares/authMiddleware');
 const roleMiddleware = require('../middlewares/roleMiddleware');
@@ -25,5 +26,8 @@ router.delete('/:id', authMiddleware, roleMiddleware(['admin']), deleteInventory
 
 // Get expiring items (Authenticated users only)
 router.get('/alerts', authMiddleware, getExpiringItems);
+
+// Fetch low-stock items
+router.get('/low-stock', authMiddleware, getLowStockItems);
 
 module.exports = router;
