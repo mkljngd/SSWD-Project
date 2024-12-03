@@ -42,6 +42,7 @@
         id="expiry_date"
         [(ngModel)]="inventoryItem.expiry_date"
         name="expiry_date"
+        [min]="minDate"
       />
     </div>
     <div class="form-actions">

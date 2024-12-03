@@ -12,7 +12,7 @@ export class InventoryFormComponent implements OnInit {
   inventoryItem = { id: '', ingredient: '', quantity: 0, unit: '', expiry_date: '' };
   isEditMode = false;
   ingredients: any[] = []; // Store ingredients
-
+  minDate: string = '';
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
@@ -32,6 +32,8 @@ export class InventoryFormComponent implements OnInit {
       this.inventoryItem.expiry_date = tenDaysLater.toISOString().split('T')[0];
     }
     this.fetchIngredients(); // Fetch ingredients
+    const today = new Date();
+    this.minDate = today.toISOString().split('T')[0];
   }
 
   fetchInventoryItem(itemId: string): void {

@@ -41,7 +41,8 @@ const getAllInventoryItems = async (req, res) => {
             `SELECT ii.*, i.name
             FROM inventory_items ii
             JOIN ingredients i ON ii.ingredient_id = i.ingredient_id
-            WHERE ii.profile_id = $1`,
+            WHERE ii.profile_id = $1
+            ORDER BY ii.expiry_date ASC NULLS LAST`, 
             [profileId]
         );
         res.status(200).json(result.rows);

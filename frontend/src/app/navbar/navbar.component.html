@@ -8,13 +8,11 @@
   <div [class.active]="isMenuOpen" class="menu-container">
     <ul class="menu">
       <li><a routerLink="/recipes" (click)="closeMenu()">Explore Recipes</a></li>
-      <li><a routerLink="/favorites" (click)="closeMenu()">Favorite Recipes</a></li>
       <li><a routerLink="/inventory" (click)="closeMenu()">Inventory</a></li>
     </ul>
     <ul class="menu">
+      <li><a routerLink="/favorites" (click)="closeMenu()">Favorite Recipes</a></li>
       <li><a routerLink="/profiles" (click)="closeMenu()">Profile</a></li>
-      <li><a routerLink="/notifications" (click)="closeMenu()">Notifications</a></li>
-      <li *ngIf="isAdmin"><a routerLink="/user-management" (click)="closeMenu()">User Management</a></li>
       <li><a (click)="logout()">Logout</a></li>
     </ul>
   </div>

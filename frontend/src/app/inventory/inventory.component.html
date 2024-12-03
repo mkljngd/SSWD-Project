@@ -13,7 +13,7 @@
         <p *ngIf="item.expiry_date">Expiry Date: {{ item.expiry_date | date }}</p>
       </div>
       <div class="inventory-actions">
-        <button class="btn btn-danger" (click)="deleteInventoryItem(item.id)">Delete</button>
+        <button class="btn btn-danger" (click)="deleteInventoryItem(item.inventory_item_id)">Delete</button>
       </div>
     </div>
   </div>
