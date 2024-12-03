@@ -10,6 +10,7 @@ import { RecipeDetailsComponent } from './recipe-details/recipe-details.componen
 import { ProfileListComponent } from './profile-list/profile-list.component';
 import { InventoryComponent } from './inventory/inventory.component';
 import { InventoryFormComponent } from './inventory-form/inventory-form.component';
+import { FavoriteRecipeListComponent } from './favorite-recipe-list/favorite-recipe-list.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -22,6 +23,8 @@ const routes: Routes = [
   { path: 'profiles', component: ProfileListComponent },
   { path: 'inventory', component: InventoryComponent },
   { path: 'inventory/add', component: InventoryFormComponent },
+  { path: 'favorites', component: FavoriteRecipeListComponent }, // Add this route
+
 ];
 
 @NgModule({

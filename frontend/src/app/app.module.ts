@@ -20,6 +20,7 @@ import { ProfileListComponent } from './profile-list/profile-list.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InventoryComponent } from './inventory/inventory.component';
 import { InventoryFormComponent } from './inventory-form/inventory-form.component';
+import { FavoriteRecipeListComponent } from './favorite-recipe-list/favorite-recipe-list.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { InventoryFormComponent } from './inventory-form/inventory-form.componen
     ProfileListComponent,
     InventoryComponent,
     InventoryFormComponent,
+    FavoriteRecipeListComponent,
   ],
   imports: [
     BrowserModule,

@@ -44,10 +44,9 @@ export class RecipeDetailsComponent implements OnInit {
   }
 
   addToFavorites() {
-    const profileId = localStorage.getItem('profileId'); // Assume profileId is stored in local storage
+    const profileId = localStorage.getItem('active_profile');
     console.log("prof", profileId)
-    return
-    const apiUrl = `${environment.apiUrl}/favorites`;
+    const apiUrl = `${environment.apiUrl}/recipes/favorites`;
 
     this.http.post(apiUrl, { profile_id: profileId, recipe_id: this.recipe.recipe_id }).subscribe({
       next: () => {
