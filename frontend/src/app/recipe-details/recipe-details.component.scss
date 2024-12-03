@@ -3,6 +3,7 @@
   background: #121212;
   color: #e0e0e0;
   border-radius: 8px;
+  min-height: 80vh;
 }
 
 .header-row {
@@ -79,7 +80,7 @@
   }
 }
 .favorite {
-  background-color: #ff5252; /* Subtle red */
+  background-color: #ff5252;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -90,7 +91,7 @@
 }
 
 .not-favorite {
-  background-color: #4caf50; /* Subtle green */
+  background-color: #4caf50;
   color: #fff;
   border: none;
   border-radius: 4px;

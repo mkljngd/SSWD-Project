@@ -100,5 +100,5 @@ module.exports = {
     updateInventoryItem,
     deleteInventoryItem,
     getExpiringItems,
-    getLowStockItems // New method
+    getLowStockItems,
 };

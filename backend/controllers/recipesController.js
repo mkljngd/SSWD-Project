@@ -41,6 +41,7 @@ const getAllRecipes = async (req, res) => {
                 recipes.updated_at
             FROM recipes
             JOIN cuisines ON recipes.cuisine_id = cuisines.cuisine_id
+            ORDER BY recipes.title ASC 
             LIMIT $1 OFFSET $2`,
       [parseInt(limit), parseInt(offset)]
     );

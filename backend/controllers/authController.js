@@ -9,18 +9,30 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const register = async (req, res) => {
     const { username, email, password } = req.body;
     try {
+        // Check if the user already exists
         const userExists = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         if (userExists.rows.length) {
             return res.status(400).json({ message: 'User already exists with this email' });
         }
 
+        // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
-        const result = await pool.query(
+
+        // Create the user
+        const userResult = await pool.query(
             `INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING *`,
             [username, email, hashedPassword]
         );
 
-        res.status(201).json({ message: 'User registered successfully', user: result.rows[0] });
+        const userId = userResult.rows[0].user_id;
+
+        // Create a default profile for the user
+        await pool.query(
+            `INSERT INTO profiles (user_id, profile_name, is_active) VALUES ($1, $2, $3)`,
+            [userId, username, true]
+        );
+
+        res.status(201).json({ message: 'User registered successfully', user: userResult.rows[0] });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Internal Server Error' });
