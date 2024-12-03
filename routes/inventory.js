@@ -6,21 +6,24 @@ const {
     deleteInventoryItem,
     getExpiringItems
 } = require('../controllers/inventoryController');
+const authMiddleware = require('../middlewares/authMiddleware');
+const roleMiddleware = require('../middlewares/roleMiddleware');
+
 const router = express.Router();
 
-// Add a new inventory item
-router.post('/', addInventoryItem);
+// Add a new inventory item (Authenticated users only)
+router.post('/', authMiddleware, addInventoryItem);
 
-// Get all inventory items
-router.get('/', getAllInventoryItems);
+// Get all inventory items (Authenticated users only)
+router.get('/', authMiddleware, getAllInventoryItems);
 
-// Update an inventory item
-router.put('/:id', updateInventoryItem);
+// Update an inventory item (Authenticated users only)
+router.put('/:id', authMiddleware, updateInventoryItem);
 
-// Delete an inventory item
-router.delete('/:id', deleteInventoryItem);
+// Delete an inventory item (Admin only)
+router.delete('/:id', authMiddleware, roleMiddleware(['admin']), deleteInventoryItem);
 
-// Get expiring items
-router.get('/alerts', getExpiringItems);
+// Get expiring items (Authenticated users only)
+router.get('/alerts', authMiddleware, getExpiringItems);
 
 module.exports = router;

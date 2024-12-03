@@ -1,26 +1,34 @@
-const express = require('express');
+const express = require("express");
 const {
-    createIngredient,
-    getAllIngredients,
-    updateIngredient,
-    deleteIngredient,
-    getExpiringIngredients
-} = require('../controllers/ingredientsController');
+  createIngredient,
+  getAllIngredients,
+  updateIngredient,
+  deleteIngredient,
+  getExpiringIngredients,
+} = require("../controllers/ingredientsController");
+const authMiddleware = require("../middlewares/authMiddleware");
+const roleMiddleware = require("../middlewares/roleMiddleware");
+
 const router = express.Router();
 
-// Create a new ingredient
-router.post('/', createIngredient);
+// Create a new ingredient (Admin only)
+router.post("/", authMiddleware, roleMiddleware(["admin"]), createIngredient);
 
-// Get all ingredients
-router.get('/', getAllIngredients);
+// Get all ingredients (Public)
+router.get("/", getAllIngredients);
 
-// Update an ingredient
-router.put('/:id', updateIngredient);
+// Update an ingredient (Admin only)
+router.put("/:id", authMiddleware, roleMiddleware(["admin"]), updateIngredient);
 
-// Delete an ingredient
-router.delete('/:id', deleteIngredient);
+// Delete an ingredient (Admin only)
+router.delete(
+  "/:id",
+  authMiddleware,
+  roleMiddleware(["admin"]),
+  deleteIngredient
+);
 
-// Get expiring ingredients
-router.get('/alerts', getExpiringIngredients);
+// Get expiring ingredients (Authenticated users only)
+router.get("/alerts", authMiddleware, getExpiringIngredients);
 
 module.exports = router;

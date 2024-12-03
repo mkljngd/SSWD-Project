@@ -1,26 +1,25 @@
-const express = require('express');
+const express = require("express");
 const {
-    createRecipe,
-    getAllRecipes,
-    updateRecipe,
-    deleteRecipe,
-    suggestRecipes
-} = require('../controllers/recipesController');
+  createRecipe,
+  getAllRecipes,
+  updateRecipe,
+  deleteRecipe,
+} = require("../controllers/recipesController");
+const authMiddleware = require("../middlewares/authMiddleware");
+const roleMiddleware = require("../middlewares/roleMiddleware");
+
 const router = express.Router();
 
-// Create a recipe
-router.post('/', createRecipe);
+// Create a recipe (Authenticated users only)
+router.post("/", authMiddleware, createRecipe);
 
-// Get all recipes
-router.get('/', getAllRecipes);
+// Get all recipes (Public)
+router.get("/", getAllRecipes);
 
-// Update a recipe
-router.put('/:id', updateRecipe);
+// Update a recipe (Admin role only)
+router.put("/:id", authMiddleware, roleMiddleware(["admin"]), updateRecipe);
 
-// Delete a recipe
-router.delete('/:id', deleteRecipe);
-
-// Suggest recipes
-router.get('/suggestions', suggestRecipes);
+// Delete a recipe (Admin only)
+router.delete("/:id", authMiddleware, roleMiddleware(["admin"]), deleteRecipe);
 
 module.exports = router;
