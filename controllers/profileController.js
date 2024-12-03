@@ -7,7 +7,11 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 // Validation schema for profile creation and updates
 const profileSchema = Joi.object({
     profile_name: Joi.string().max(100).required(),
-    dietary_preferences: Joi.object().optional(),
+    dietary_preferences: Joi.object({
+        vegetarian: Joi.boolean(),
+        vegan: Joi.boolean(),
+        allergies: Joi.array().items(Joi.string()),
+    }).optional(),
 });
 
 // Create a new profile
@@ -18,6 +22,14 @@ const createProfile = async (req, res) => {
     }
     const { user_id, profile_name, dietary_preferences } = req.body;
     try {
+        const existingProfile = await pool.query(
+            `SELECT * FROM profiles WHERE user_id = $1 AND profile_name = $2`,
+            [user_id, profile_name]
+        );
+        if (existingProfile.rows.length > 0) {
+            return res.status(400).json({ message: "Profile name already exists for this user" });
+        }
+
         const result = await pool.query(
             `INSERT INTO profiles (user_id, profile_name, dietary_preferences)
              VALUES ($1, $2, $3) RETURNING *`,
@@ -41,6 +53,24 @@ const getUserProfiles = async (req, res) => {
         res.status(200).json(result.rows);
     } catch (err) {
         console.error("Error fetching profiles:", err);
+        res.status(500).json({ error: err.message || "Internal Server Error" });
+    }
+};
+
+// Get the active profile for a user
+const getActiveProfile = async (req, res) => {
+    const { user_id } = req.params;
+    try {
+        const result = await pool.query(
+            `SELECT * FROM profiles WHERE user_id = $1 AND is_active = true`,
+            [user_id]
+        );
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: "No active profile found" });
+        }
+        res.status(200).json(result.rows[0]);
+    } catch (err) {
+        console.error("Error fetching active profile:", err);
         res.status(500).json({ error: err.message || "Internal Server Error" });
     }
 };
@@ -123,6 +153,7 @@ const setActiveProfile = async (req, res) => {
 module.exports = {
     createProfile,
     getUserProfiles,
+    getActiveProfile, // New method
     updateProfile,
     deleteProfile,
     setActiveProfile

@@ -2,6 +2,7 @@ const express = require("express");
 const {
     createProfile,
     getUserProfiles,
+    getActiveProfile, // New route
     updateProfile,
     deleteProfile,
     setActiveProfile,
@@ -15,6 +16,9 @@ router.post("/", authMiddleware, createProfile);
 
 // Get all profiles for a user
 router.get("/:user_id", authMiddleware, getUserProfiles);
+
+// Get active profile for a user
+router.get("/:user_id/active", authMiddleware, getActiveProfile);
 
 // Update a profile
 router.put("/:profile_id", authMiddleware, updateProfile);
