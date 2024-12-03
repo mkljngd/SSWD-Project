@@ -1,0 +1,22 @@
+<div class="navbar-container">
+  <div class="navbar">
+    <span class="app-name">Smart Meal Planner</span>
+    <button class="menu-toggle" (click)="toggleMenu()">
+      <span class="menu-icon">☰</span>
+    </button>
+  </div>
+  <div [class.active]="isMenuOpen" class="menu-container">
+    <ul class="menu">
+      <li><a routerLink="/recipes" (click)="closeMenu()">Recipes</a></li>
+      <li><a routerLink="/meal-plans" (click)="closeMenu()">Meal Plans</a></li>
+      <li><a routerLink="/shopping-lists" (click)="closeMenu()">Shopping Lists</a></li>
+      <li><a routerLink="/inventory" (click)="closeMenu()">Inventory</a></li>
+    </ul>
+    <ul class="menu">
+      <li><a routerLink="/profile" (click)="closeMenu()">Profile</a></li>
+      <li><a routerLink="/notifications" (click)="closeMenu()">Notifications</a></li>
+      <li *ngIf="isAdmin"><a routerLink="/user-management" (click)="closeMenu()">User Management</a></li>
+      <li><a (click)="logout()">Logout</a></li>
+    </ul>
+  </div>
+</div>

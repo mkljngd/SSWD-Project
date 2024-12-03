@@ -1,0 +1,99 @@
+.navbar-container {
+  background: #1e1e1e;
+  color: #d0d0d0;
+  padding: 0.5rem 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #d6aaff;
+}
+
+.menu-toggle {
+  background: none;
+  border: none;
+  color: #d0d0d0;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.menu-container {
+  display: none;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+  background: #121212;
+  padding: 0.5rem;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.menu-container.active {
+  display: flex;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1 1 50%; /* Split into columns */
+}
+
+.menu li {
+  margin-bottom: 0.8rem;
+}
+
+.menu li:last-child {
+  margin-bottom: 0;
+}
+
+.menu li a,
+.menu li button { /* Include both anchor tags and buttons */
+  text-decoration: none;
+  color: #d6aaff;
+  font-size: 1rem;
+  font-weight: bold;
+  display: block;
+  cursor: pointer; /* Ensure the pointer cursor */
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0;
+}
+
+.menu li a:hover,
+.menu li button:hover {
+  color: #ffffff;
+}
+
+@media (min-width: 768px) {
+  .menu-container {
+    display: flex !important;
+    flex-direction: row;
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .menu {
+    flex: 0 1 auto;
+  }
+
+  .menu li {
+    margin-bottom: 0;
+    margin-right: 1rem;
+  }
+
+  .menu-toggle {
+    display: none;
+  }
+}
