@@ -16,7 +16,7 @@ const router = express.Router();
 router.post('/', authMiddleware, addInventoryItem);
 
 // Get all inventory items (Authenticated users only)
-router.get('/', authMiddleware, getAllInventoryItems);
+router.get('/:profileId', authMiddleware, getAllInventoryItems);
 
 // Update an inventory item (Authenticated users only)
 router.put('/:id', authMiddleware, updateInventoryItem);

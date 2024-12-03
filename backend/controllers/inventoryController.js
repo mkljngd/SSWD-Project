@@ -35,14 +35,14 @@ const getLowStockItems = async (req, res) => {
 
 // Get all inventory items
 const getAllInventoryItems = async (req, res) => {
-    const { profile_id } = req.query; // Pass profile_id as query parameter
+    const { profileId } = req.params; // Pass profile_id as query parameter
     try {
         const result = await pool.query(
             `SELECT ii.*, i.name
-             FROM inventory_items ii
-             JOIN ingredients i ON ii.ingredient_id = i.ingredient_id
-             WHERE ii.profile_id = $1`,
-            [profile_id]
+            FROM inventory_items ii
+            JOIN ingredients i ON ii.ingredient_id = i.ingredient_id
+            WHERE ii.profile_id = $1`,
+            [profileId]
         );
         res.status(200).json(result.rows);
     } catch (err) {
