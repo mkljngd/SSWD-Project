@@ -16,10 +16,10 @@ const router = express.Router();
 router.post("/", authMiddleware, createRecipe);
 
 // Get all recipes (Public)
-router.get("/", getAllRecipes);
+router.get("/", authMiddleware, getAllRecipes);
 
 // Get recipes filtered by cuisine (Public)
-router.get("/cuisine/:cuisine_id", getRecipesByCuisine);
+router.get("/cuisine/:cuisine_id",authMiddleware, getRecipesByCuisine);
 
 // Get enhanced recipe suggestions (Authenticated users only)
 router.get("/suggestions", authMiddleware, suggestRecipes);
