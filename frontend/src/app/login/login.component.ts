@@ -23,7 +23,7 @@ export class LoginComponent {
         next: (response: any) => {
           localStorage.setItem('token', response.token);
           localStorage.setItem('user_id', response.user_id);
-          localStorage.setItem('active_profile', "75eebc1d-4a24-4ff6-8f19-47390c80b5d5");
+          localStorage.setItem('active_profile', response.active_profile_id);
           this.router.navigate(['/recipes']);
         },
         error: () => {
